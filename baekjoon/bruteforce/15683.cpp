@@ -19,6 +19,7 @@ vector<pair<int, int>> cctvs;
 const int dx[] = {-1, 1, 0, 0};
 const int dy[] = {0, 0, -1, 1};
 
+// cctv의 숫자 별 감시 범위 
 const vector<vector<vector<int>>> directions = {
     {},
     {{0}, {1}, {2}, {3}},
@@ -32,7 +33,7 @@ bool inRange(int x, int y){
     return 0 <= x && x < N && 0 <= y && y < M;
 }
 
-// 감시시
+// 해당 cctv가 범위 탐색색
 void watch(int x, int y, const vector<int>& dirs, vector<pair<int, int>>& changed){
     
     for (int dir : dirs){
@@ -51,8 +52,10 @@ void watch(int x, int y, const vector<int>& dirs, vector<pair<int, int>>& change
     }
 }
 
+// cctv별로 탐색을 진행행
 void dfs(int depth){
 
+    // cctv개수만큼 탐색하였을 때 0의 개수 세기기
     if (depth == cctvs.size()){
         int cnt = 0;
         for (int i = 0; i < N; i++){
@@ -65,6 +68,7 @@ void dfs(int depth){
         return;
     }
 
+    
     int x = cctvs[depth].first;
     int y = cctvs[depth].second;
     int type = map[x][y];
@@ -72,8 +76,11 @@ void dfs(int depth){
     for (const vector<int>& dirs : directions[type]){
         vector<pair<int, int>> changed;
         watch(x, y, dirs, changed);
+
+        // 다음 cctv로 진입입
         dfs(depth + 1);
         
+        // 백트래킹
         for (pair<int, int>& p : changed){
             map[p.first][p.second] = 0;
         }
